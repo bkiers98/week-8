@@ -4,13 +4,16 @@ import numpy as np
 class MarkovText(object):
 
     def __init__(self, corpus):
+        '''Initializes self with a corpus and null dictionary'''
         self.corpus = corpus
         self.term_dict = None  # you'll need to build this
 
     def get_term_dict(self):
-
-        # your code here ...
-
+        '''
+        Given a corpus, generates a dictionary so that each value is a list
+        of terms that follow the key term in the corpus. Duplicate values
+        are kept to increase the chances of their selection in generate().
+        '''
         self.term_dict = defaultdict(list)
         for i, term in enumerate(self.corpus.split()):
             if i < len(self.corpus.split()) - 1:
@@ -22,6 +25,18 @@ class MarkovText(object):
 
 
     def generate(self, seed_term=None, term_count=15):
+        '''
+        Generates a string of terms following the term patterns in the
+        term_dict. 
+
+        Parameters
+        ----------
+        seed_term : str, optional
+            Term from the corpus to start the 'phrase'. By default is None,
+            which prompts a random seed_term.
+        term_count : int, optional
+            Number of terms to generate into the 'phrase'. By default is 15.
+        '''
         term_dict = dict(self.term_dict)
         # raise ValueError if seed_term not in corpus
         if seed_term:
@@ -34,7 +49,6 @@ class MarkovText(object):
         else:
             seed_term = np.random.choice(list(term_dict.keys()))
 
-        # for each term in range of term_count, select the next term from the term's dictionary
         phrase = seed_term
         next_term = seed_term
         for x in range(term_count-1):
@@ -43,5 +57,4 @@ class MarkovText(object):
             else:
                 next_term = np.random.choice(term_dict[next_term])
             phrase += ' ' + next_term
-        # if a term's dict is an empty list, start a new sentence and choose a random term next.
         return (phrase)
