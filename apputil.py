@@ -40,14 +40,11 @@ class MarkovText(object):
         term_dict = dict(self.term_dict)
         # raise ValueError if seed_term not in corpus
         if seed_term:
-            try:
-                type(term_dict[seed_term]) != list
-                # next_term = np.random.choice(self.term_dict[seed_term])
-            except KeyError as e:
-                print(f'--{e}--:\n\t -->{seed_term} is not in corpus.')
-                return term_dict.keys()
+            if seed_term not in term_dict:
+                raise ValueError(f'{seed_term} is not in corpus')
         else:
             seed_term = np.random.choice(list(term_dict.keys()))
+
 
         phrase = seed_term
         next_term = seed_term
